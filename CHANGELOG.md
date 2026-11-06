@@ -1,3 +1,10 @@
+## 0.0.5
+
+* Updates the minimum supported SDK version to Flutter 3.44/Dart 3.12.
+* Migrates to built-in Kotlin.
+* iOS: stop setting Amplify's log level to verbose at registration. Amplify's default
+  (errors only) applies, so session and credential details no longer reach the device log.
+
 ## 0.0.4
 
 * iOS: map `accessDenied` and `cameraPermissionDenied` to the same stable codes

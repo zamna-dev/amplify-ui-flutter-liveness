@@ -15,7 +15,6 @@ public class RekognitionFaceLivenessPlugin: NSObject, FlutterPlugin {
         registrar.register(factory, withId: "face_liveness_view")
         
         do {
-            Amplify.Logging.logLevel = .verbose
             try Amplify.add(plugin: AWSCognitoAuthPlugin())
             try Amplify.configure()
         } catch {
