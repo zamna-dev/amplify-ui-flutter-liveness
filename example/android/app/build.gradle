@@ -1,6 +1,5 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -11,12 +10,10 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        // Amplify 2.33 fails checkDebugAarMetadata without it.
+        coreLibraryDesugaringEnabled = true
     }
 
     defaultConfig {
@@ -39,10 +36,24 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 flutter {
     source = "../.."
 }
 
+// Amplify liveness 1.9.0 pulls litert-support 1.4.1, an empty AAR whose namespace clashes with
+// litert-support-api; AGP 9 refuses the manifest merge. Drop it and depend on the real one.
+configurations.all {
+    exclude group: "com.google.ai.edge.litert", module: "litert-support"
+}
+
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.ai.edge.litert:litert-support-api:1.4.1'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
